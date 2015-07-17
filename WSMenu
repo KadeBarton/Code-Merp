@@ -1,0 +1,38 @@
+#Credit Jamie Grandfield 2015
+#Code changed by Kade Barton 2015
+function MainMenu()
+{
+	do
+	{
+		clear
+		Write-Host "`n`t`tServer Status Check/Maintenance" -for red
+		Write-Host "`t`t`t`tMain Menu`n" -for yellow
+		Write-Host "`t`t`t1. View all services running on server" -for green
+		Write-Host "`t`t`t2. Search for a specific service on server" -for green
+		Write-Host "`t`t`t3. Manipulate services on the server" -for green
+		Write-Host "`t`t`t4. Exit" -for green
+				
+		$mainMenuChoice = read-host -prompt "`n`n`t`tChoice"
+	} until ($mainMenuChoice -ne "-1")# until ($mainMenuChoice -eq "1" -or $mainMenuChoice -eq "2")
+	switch ($mainMenuChoice)
+	{
+		"1" {
+				CreateUserFolders
+			}
+		"2" {
+				Get-XADUserPasswordExpirationDate
+			}
+		"3" {
+				ResetPassword
+			}			
+		"4" {
+				exit
+			}
+		default
+			{
+				write-host "`n`n`t`tInvalid selection, please try again`n`t`tPress ENTER to continue" -for red
+				read-host
+				MainMenu
+			}
+	}
+}
