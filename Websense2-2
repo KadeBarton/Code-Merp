@@ -1,0 +1,27 @@
+#Code by Kade Barton 2015
+#Remote server service restart program
+
+[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | out-null
+
+$OUTPUT = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to continue?", "status", 4) #allows user to use a yes/no choice box.. answer saved as $OUTPUT 
+if ($OUTPUT -eq "Yes")
+{    
+	Write-Host "Attempting to restart Websense Filtering Service..." -For Red
+	Invoke-Command -ComputerName Websenseapp {Stop-Service "Windows Time"}                           #This section tells the server
+	Get-Service -ComputerName Websenseapp -Name "Windows Time"                                       #what to stop and then start
+	Write-Host "Please wait while attempting to restart service..." -For Green                       #back up//
+	Start-Sleep 10                                                                                   #The sleep function is just for
+	Invoke-Command -ComputerName Websenseapp {Start-Service "Windows Time"}                          #buffer time//
+    Write-Host "Program stop/start completed." -For Green                                            #Also returns status of the service	
+	Start-Sleep -s 10                                                                                #being restarted after stop and start
+	Get-Service -ComputerName Websenseapp -Name "Windows Time"                                       #commands are issued
+}
+else
+{
+	[System.Windows.Forms.MessageBox]::Show("The program will now terminate." , "Status")            #Simply exits if the answer from above was no
+	Exit
+}
+Write-Host ""																						 #Program goes here once finished
+Write-Host "You may terminate the program or it will terminate itself in 15 seconds." -For Green	 #will give you 15s to close the program
+Start-Sleep -s 15																					 #or it will close it for you.
+
