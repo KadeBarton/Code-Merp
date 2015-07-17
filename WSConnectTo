@@ -1,0 +1,35 @@
+$SERVERNAME = Read-Host "What server do you wish to connect to?"
+$SERVERQUESTION = write-host ("You chose x, Is this correct?", "status") 
+
+{
+	do
+	{
+		Write-Host "`t`t`t1. Yes" -for green
+		Write-Host "`t`t`t2. No" -for green
+		Write-Host "`t`t`t3. Exit" -for green
+				
+		$mainMenuChoice = read-host -prompt "`n`n`t`tChoice"
+	} until ($mainMenuChoice -ne "-1")# until ($mainMenuChoice -eq "1" -or $mainMenuChoice -eq "2")
+	switch ($mainMenuChoice)
+	{
+		"1" {
+				write-host "this will go to the main page"
+			}
+		"2" {
+				write-host "this should bring you back to the server selcection"
+			}
+		"3" {
+				write-host "this will close the program"
+			}			
+		default
+			{
+				write-host "`n`n`t`tInvalid selection, please try again`n`t`tPress ENTER to continue" -for red
+				read-host
+				MainMenu
+			}
+	}
+}
+
+
+
+#Write-Host "You wish to connect to " $SERVERNAME ", is this correct?"
