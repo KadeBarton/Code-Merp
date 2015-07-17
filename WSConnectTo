@@ -1,7 +1,8 @@
 $SERVERNAME = Read-Host "What server do you wish to connect to?"
-$SERVERQUESTION = write-host ("You chose x, Is this correct?", "status") 
+$SERVERQUESTION = write-host ("You chose Is this correct?") 
 
-{
+
+
 	do
 	{
 		Write-Host "`t`t`t1. Yes" -for green
@@ -16,7 +17,7 @@ $SERVERQUESTION = write-host ("You chose x, Is this correct?", "status")
 				write-host "this will go to the main page"
 			}
 		"2" {
-				write-host "this should bring you back to the server selcection"
+				write-host "this should bring you back to the server selection"
 			}
 		"3" {
 				write-host "this will close the program"
@@ -28,8 +29,3 @@ $SERVERQUESTION = write-host ("You chose x, Is this correct?", "status")
 				MainMenu
 			}
 	}
-}
-
-
-
-#Write-Host "You wish to connect to " $SERVERNAME ", is this correct?"
