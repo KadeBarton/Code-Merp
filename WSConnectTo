@@ -1,7 +1,5 @@
-$SERVERNAME = Read-Host "What server do you wish to connect to?"
-$SERVERQUESTION = write-host ("You chose Is this correct?") 
-
-
+$SERVERNAME = Read-Host ("What server do you wish to connect to?")
+write-host ("You chose $SERVERNAME, Is this correct?") -for green
 
 	do
 	{
@@ -14,13 +12,13 @@ $SERVERQUESTION = write-host ("You chose Is this correct?")
 	switch ($mainMenuChoice)
 	{
 		"1" {
-				write-host "this will go to the main page"
+				write-host "this will go to the main page" -for blue
 			}
 		"2" {
-				write-host "this should bring you back to the server selection"
+				write-host "this should bring you back to the server selection" -for blue
 			}
 		"3" {
-				write-host "this will close the program"
+				write-host "this will close the program" -for blue
 			}			
 		default
 			{
@@ -29,3 +27,8 @@ $SERVERQUESTION = write-host ("You chose Is this correct?")
 				MainMenu
 			}
 	}
+start-sleep -s 5
+
+
+
+#Write-Host "You wish to connect to " $SERVERNAME ", is this correct?"
