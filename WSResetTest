@@ -1,0 +1,93 @@
+#Code by Kade Barton 2015
+#Remote server service restart program
+
+<# function ServiceTestStop()
+{
+	$serviceStatus = (Get-Service -ComputerName Websenseapp -Name "Windows Time").status
+	do 
+		{
+		(write-host "please wait while I restart the service...")
+		}
+	while ($serviceStatus -eq "Stopped") 
+}
+
+function ServiceTestStart()
+{
+	$serviceStatus = (Get-Service -ComputerName Websenseapp -Name "Windows Time").status
+	do
+		{
+		(write-host "waiting on the service to start back up...")
+		}
+	While ($ServiceStatus -eq "Started")
+} #>
+
+function Count()
+{
+$i = 1
+if ($i -ne 15)
+	{
+	 $i++
+	 start-sleep -s 2
+	}
+	else
+	{
+		[System.Windows.Forms.MessageBox]::Show("The program is having issues restarting the service. Please check the server for the service's status" , "Status")
+	}
+}
+
+ function ServiceTestStop()
+{
+	$i = 0
+	do
+	{
+		$i++
+		start-sleep -s 5
+		$serviceStatus = (Get-Service -ComputerName Websenseapp -Name "W32Time").status
+	}
+	until (($ServiceStatus -eq "Stopped") -or ($i -eq 6))
+
+	if (($i -eq 6) -and ($serviceStatus -ne "Stopped"))
+	{
+		Write-Host "Something bad happened"
+	}
+	elseif ($ServiceStatus -eq "Stopped")
+	{
+		Write-Host "Websense Filtering service is Stopped"
+	}		
+
+}  
+
+#####################################################################################################################
+
+
+
+[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | out-null
+
+$ServiceTestStopResult = ""
+$OUTPUT = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to continue?", "status", 4) #allows user to use a yes/no choice box.. answer saved as $OUTPUT 
+if ($OUTPUT -eq "Yes")
+{    
+	Write-Host "Attempting to restart Websense Filtering Service..." -For Red
+	Invoke-Command -ComputerName Websenseapp {Stop-Service "Windows Time"}                           
+	Get-Service -ComputerName Websenseapp -Name "Windows Time"                                       
+	#Write-Host "Please wait while attempting to restart service..." -For Green                      	
+	ServiceTestStop
+	#Start-Sleep 10	
+	Invoke-Command -ComputerName Websenseapp {Start-Service "Windows Time"}
+    Write-Host "Program start completed." -For Green                                            
+	Start-Sleep -s 2                                                                                
+	Get-Service -ComputerName Websenseapp -Name "Windows Time"                                       
+}
+else
+{
+	[System.Windows.Forms.MessageBox]::Show("The program will now terminate." , "Status")            #Simply exits if the answer from above was no
+	Exit
+}
+Write-Host ""																						 #Program goes here once finished
+Write-Host "You may terminate the program or it will terminate itself in 10 seconds." -For Green	 #will give you 15s to close the program
+Start-Sleep -s 10																					 #or it will close it for you.
+
+
+ 
+
+
