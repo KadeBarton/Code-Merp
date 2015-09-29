@@ -1,0 +1,206 @@
+#****************************************
+# Code by Kade Barton                   *
+# For GM Financial                      *
+# Inception:        September 2015      *
+# Last Revision:    September 29 2015   *
+#****************************************
+
+#Latest revision tests out pulling files directly from the BCDs 
+
+
+	do
+	{
+		Write-Host "`t`t`t1. Snaggit" -for green
+		Write-Host "`t`t`t2. IE11" -for green
+        Write-Host "`t`t`t3. IE11 Update" -for green
+		Write-Host "`t`t`t4. Jabber" -for green
+		Write-Host "`t`t`t5. IPC" -for green
+        Write-Host "`t`t`t6. Chatter" -for green
+        Write-Host "`t`t`t7. Close" -for green
+        Write-Host "`t`t`t10. test" -for green
+				
+		$mainMenuChoice = read-host -prompt "`n`n`t`tChoice"
+	}   until ($mainMenuChoice -ne "-1")# until ($mainMenuChoice -eq "1" -or $mainMenuChoice -eq "2")
+	   switch ($mainMenuChoice)
+	{
+		"1" { 
+			    $comp = read-host 'What is the hostname of the computer'
+                $BCD = read-host 'What is the Branch Number?'
+#SnagIt			  
+			  If (Test-Connection $comp -count 2 -Quiet) 
+			  {
+				Write-host "$comp --- online" -for green
+				write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+				Copy-Item -Path "\\srvstsarl01\packages\SnagIt\SnagIt-11" -recurse -force -Destination "\\$comp\c$\install"
+               
+                
+                #need installed on BCDs
+                #Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\SnagIt\Snagit-11" -recurse -force -Destination "\\$comp\c$\install"
+				
+
+                write-host "Application is copied. Please wait for the file to instsall." -for yellow
+				invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\SnagIt-11" /S} 
+				write-host "Snagit is installed. Please close the application." -for green
+			  }
+			  
+			   
+			  else
+			  {
+				$noPing += $comp 
+				write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				read-host
+
+			  }
+			}
+
+
+		"2" {
+				$comp = read-host 'What is the hostname of the computer'
+                $BCD = read-host 'What is the Branch Number?'
+#IE11			  
+			  If (Test-Connection $comp -count 2 -Quiet) 
+			  {
+				Write-host "$comp --- online" -for Green
+				write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+				#Copy-Item -Path "\\srvstsarl01\packages\MS-IE11" -recurse -force -Destination "\\$comp\c$\install"
+                Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\MS-IE11\IE11-Setup-Full.exe" -recurse -force -Destination "\\$comp\c$\install"
+				write-host "Application is copied. Please wait for the file to instsall." -for yellow
+				invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\MS-IE11\IE11-Setup-Full" /quiet /promptrestart} 
+				write-host "IE 11 is installed. Please close the application." -for green
+			  }
+			  
+			   
+			  else
+			  {
+				$noPing += $comp 
+				write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				read-host
+
+		      }
+			}
+
+
+		"3" {
+				$comp = read-host 'What is the hostname of the computer'
+                $BCD = read-host 'What is the Branch Number?'
+#IE11 Update			  
+			  If (Test-Connection $comp -count 2 -Quiet) 
+			  {
+                Write-host "$comp --- online" -for Green
+				write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+				#Copy-Item -Path "\\SVNASTX1001\GMFDE_Packages\Packages\MS-IE11\2_IE11-Windows6.1-KB3078071-x64.msu" -recurse -force -Destination "\\$comp\c$\install\MS-IE11"
+
+ #-------->
+                Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\         Windows Update Path Here            " -recurse -force -Destination "\\$comp\c$\install"
+ #-------->
+
+				write-host "Application is copied. Please wait for the file to install." -for yellow
+                invoke-command -computername $comp -scriptblock { & cmd /c "dism.exe /online /add-package /packagepath:c:\install\MS-IE11\IE11-Windows6.1-KB3078071-x64.cab"}
+				write-host "IE 11 Update is installed. Please close the application." -for green
+			  }
+			  
+			   
+			  else
+			  {
+				$noPing += $comp 
+				write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				read-host
+
+			  }
+			}
+
+
+        "4" {
+				$comp = read-host 'What is the Hostname of the computer'
+                $BCD = read-host 'What is the Branch Number?'
+                
+#Jabber
+				  If (Test-Connection $comp -count 2 -Quiet) 
+				  {
+					Write "$comp --- Online" -for green
+                    write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+					#Copy-Item -Path "\\srvstsarl01\packages\Cisco-Jabber" -recurse -force -Destination "\\$comp\c$\install"
+                    Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\Cisco-Jabber\Cisco-Jabber.exe" -recurse -force -Destination "\\$comp\c$\install"
+					write-host "Application is copied. Please wait for the file to instsall." -for yellow
+					invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-Jabber\Cisco-Jabber-10.6.exe" /S} 
+					write-host "Jabber is installed. Please close the application." -for green
+				  }
+				  
+				   
+				  else
+				  {
+					$noPing += $comp 
+					write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				  }
+			}
+
+
+		"5" {
+				$comp = read-host 'What is the hostname of the computer'
+                $BCD = read-host 'What is the Branch Number? '
+#IPC			  
+			  If (Test-Connection $comp -count 2 -Quiet) 
+			  {
+				Write-host "$comp --- online" -for Green
+				write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+				#Copy-Item -Path "\\srvstsarl01\packages\Cisco-SoftPhone" -recurse -force -Destination "\\$comp\c$\install"
+                Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\Cisco-SoftPhone\cisco-Softphone.exe" -recurse -force -Destination "\\$comp\c$\install"
+				write-host "Application is copied. Please wait for the file to install." -for yellow
+				invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-SoftPhone\CiscoIPCommunicatorSetup_8.6.2.0" /S} 
+				write-host "Program is installed. This application will close in 10 seconds" -for green
+			  }
+			  
+			   
+			  else
+			  {
+				$noPing += $comp 
+				write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				read-host
+                InstallPrograms
+			  }
+			}
+
+
+		"6" {
+				$comp = read-host 'What is the hostname of the computer'
+                $BCD = read-host 'What is the Branch Cache Device name? '
+#Chatter			  
+			  If (Test-Connection $comp -count 2 -Quiet) 
+			  {
+				Write-host "$comp --- online" -for Green
+				write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+				#Copy-Item -Path "\\srvstsarl01\Packages\SalesForce\ChatterDesktop\" -recurse -force -Destination "\\$comp\c$\install"
+                Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\SalesForce\ChatterDesktop\ChatterDesktop.exe" -recurse -force -Destination "\\$comp\c$\install"
+				write-host "Application is copied. Please wait for the file to install." -for yellow
+				invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\ChatterDesktop\3.2.1\Salesforce-ChatterDesktop-3.2.1-MSI" /S} 
+				write-host "Program is installed. This application will close in 10 seconds" -for green
+			  }
+			  
+			   
+			  else
+			  {
+				$noPing += $comp 
+				write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+				read-host
+
+			  }
+			}
+
+
+		"7" {
+#Close
+        		write-host "this will close the program"
+			}			
+		default
+			{
+				write-host "`n`n`t`tInvalid selection" -for red
+				start-sleep -s -5
+                exit
+
+			}       
+
+	}
+
+
+# Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\SalesForce\ChatterDesktop\ChatterDesktop.exe" -recurse -force -Destination "\\$comp\c$\install"
+# $BCD = read-host 'What is the Branch Number? ' 
