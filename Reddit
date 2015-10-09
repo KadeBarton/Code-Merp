@@ -1,34 +1,20 @@
-do
-			{
-
-				Write-Host "`t`t`t2. IE11" -for green
-
-						
-				$mainMenuChoice = read-host -prompt "`n`n`t`tChoice"
-			}   until ($mainMenuChoice -ne "-1")
-			   switch ($mainMenuChoice)
-			   
-				"2" {				#IE11
-					$BCD = read-host 'What is the Branch Number?' 
-					$comp = $env:computername
-					$Hostnames =  Get-Content "C:\Install\BranchMachines\$BCD.csv" 
-					foreach($comp in $Hostnames)
-					{
-						If (Test-Connection $comp -count 2 -Quiet) 
-						{
-							Write-host "$comp --- online" -for Green
-							write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
-							Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\MS-IE11" -recurse -force -Destination "\\$comp\c$\install"
-							write-host "Application is copied. Please wait for the file to instsall." -for yellow
-							invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\MS-IE11\IE11-Setup-Full.exe" /S} 
-							write-host "IE 11 is installed. Please close the application." -for green
-						}			   
-						else
-						{
-							$noPing += $comp 
-							add-content "C:\Install\Offline Hostnames.txt" "$comp"
-							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
-							
-						}
-					}
-					}
+"3" {				#IE11 Update
+	$BCD = read-host 'What is the Branch Number?' 
+	$comp = $env:computername
+	$FolderExist = "\\$comp\c$\install\MS-IE11"
+	$Hostnames =  Get-Content "C:\Install\BranchMachines\$BCD.csv" 
+	foreach($comp in $Hostnames)
+	{
+		If (Test-Connection $comp -count 2 -Quiet) 
+		{
+		    Invoke-Command -ComputerName $comp  -ScriptBlock {Copy-Item -Path "\\BCD$BCD\app_install_$BCD$\desktop_support\Packages\MS-IE11\" -recurse -force -Destination "\\$comp\c$\install\MS-IE11"} –AsJob
+      		    Invoke-Command -ComputerName $comp  -ScriptBlock {wusa.exe "C:\install\MS-IE11\2_IE11-Windows6.1-KB3078071-x64.msu"   } –AsJob
+		}			   
+		else
+		{
+			$noPing += $comp 
+			add-content "C:\Install\Offline Hostnames.txt" "$comp"
+			write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+		} 
+	}
+}
