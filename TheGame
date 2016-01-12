@@ -1,0 +1,157 @@
+Enter file contents hereimport random
+gold = 0
+
+print('Welcome to Runeland! What is your name?')
+name = input()
+
+def GameStart():
+     print('--------------------------------------------------------------------------')
+     print('You stare ahead out in the distance and decide what you will do next')
+     print('--------------------------------------------------------------------------')     
+
+     print('Greetings, Adventurer ' + name + ', what would you like to do?')
+     print('')
+     print('a. Go adventuring of course!')
+     print('b. I want to go to the general store')
+     print('c. I want to go home.. I am too scared')
+     print('d. Commit suicide. Living in this world is too stressful')
+     answer1 = input()
+
+     if answer1 == 'a':
+        Adventure1()
+     elif answer1 == 'b':
+          GeneralStore1()
+     elif answer1 == 'c':
+          GoHome()
+     elif answer1 == 'd':
+          Die()
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def Adventure1():   
+     print('-------------------------------------------------------------------------------------------')
+     print('You obviously want to go on an adventure')
+     print('There are many places around Runeland to adventure. Where would you like to go?')
+     print('')
+     print('F. The Deep Dark Forest. This is very dark and hard to see in at times... Which could make seeing enemies hard')
+     print('C. The Cave of Him. You do not want to meet Him. Could the legends be true? Is He even real?')
+     print('M. The Mountain of cold winters. Unfortunately for you, it is winter and the Sascatoon comes out in the winter from his summer slumber.')
+     answer2a = input()
+
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def GeneralStore1():
+         print('----------------------------------------------------------------------------')
+         print('Runeland has a wonderful general store full of awesomeness and oddities')
+         print('You walk up to the general store and push open the swinging doors')
+         print('The general store owner looks up and recognizes your face immediately')
+         print('-----------------------------------------------------------------------------')
+         print('')
+         print('Kazzah:   Greetings, ' + name + '! Long time no see, What can I do for you today?')
+         spacer = input()
+         print('You:   Hows it going Kazzah? I am looking for a few things that you might have.')
+         spacer = input()
+         print('Kazzah:   What would you like to look at?')
+         spacer = input()
+         print('')
+         print('You look around and Kazzah has the following categories')
+         print('a. Health Management   b. Armour   c. Weapons')
+         storeCat = input()
+         
+         if storeCat == 'a':
+              Health()
+         elif storeCat == 'b':
+              Armour()
+         elif storeCat == 'c':
+              Weapons()
+
+
+
+
+def Health():
+        print('----------------Health Management---------------')
+        print('Health Potion - 100g')
+        print('Apple - 30g')
+        print('Warp Stone - 3000g')
+        HM = input()
+        print('')
+        print('I see you chose ' + HM + '.')
+
+        if HM == 'Apple' or 'apple' or 'ap':
+             HM = int(30)
+        elif HM == 'Health Potion' or 'health potion' or 'hp':
+             HM = int(100)
+        elif HM == 'Warp Stone' or 'warp stone' or 'ws':
+             HM = 3000
+        else:
+             print('That is not a valid choice')
+             spacer = input()
+             GeneralStore1()
+        print('How many do you want?')
+        storeMulti = input()
+        total_cost = HM * int(storeMulti)
+        print('That will be {} gold pieces.'.format(total_cost))
+#Need to subtract gold from the backpack to not go below 0
+
+        print('Can  I get you anything else?')
+        HMyn = input() ####HMyn is Health management Yes or No
+        if HMyn == 'no' or 'No':
+             print('Thanks, ' + name + ', See ya soon.')
+             GameStart()
+
+def Armour():       
+        print('----------------------Amour----------------------')
+        print('a. Leather Armour - 200g')
+        print('b. Studded Leather Armour - 400g')
+        print('c. Iron Armor - 600g')
+        print('d. Steel Armour - 999g')
+        AR = input()
+
+def Weapons():
+        print('----------------------Weapons--------------------')
+        print('a. Dagger - 10g')
+        print('b. Long Sword - 400g')
+        print('c. Bow - 70g')
+        print('d. Arrow - 3g each')
+        WP = input()
+
+   
+             
+
+
+
+
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def GoHome():
+     print('You decide to go home and rest')
+     print('----------------------------------------------')
+     print('')
+     spacer = input()
+     GameStart()
+
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################     
+def Die():
+     print('Farewell cruel world! I cannot live on this world any longer!')
+     print('You dead bruh.')
+     print('-----------------------------------------------')
+     print('')
+     spacer = input()
+     GameStart()
+
+
+
+
+
+GameStart()
