@@ -1,46 +1,248 @@
-Enter file contents hereimport random
-gold = 0
+import random
+import time
+import os
+
+
+
+
+
+
+def goldPouch():
+    global goldPouch ## this defines we are talking about the global eggs value and replacing 42
+    goldPouch = 4000
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+class LivingThing():
+        def __init__(self, name, health, inventory, gold):
+                self.name = name
+                self.health = health
+                self.inventory = inventory
+                self.gold = gold
+        def TakeDamage(self, dmgAmount):
+                self.health = self.health - dmgAmount
+                if self.health == 0:
+                        print(self.name + ' is dead!')
+
+hero = LivingThing('HERONAME', 20, {}, {})
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+
+
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+print(" __        __   _                              ")
+print(" \ \      / /__| | ___ ___  _ __ ___   ___     ")
+print("  \ \ /\ / / _ \ |/ __/ _ \| '_ ` _ \ / _ \    ")
+print("   \ V  V /  __/ | (_| (_) | | | | | |  __/    ")
+print("    \_/\_/ \___|_|\___\___/|_| |_| |_|\___|    ")
+print("     _                                         ")
+print("    | |_ ___                                   ")
+print("    | __/ _ \                                  ")
+print("    | || (_) |                                 ")
+print("     \__\___/                                  ")
+print("  ____                   _                 _ _ ")
+print(" |  _ \ _   _ _ __   ___| | __ _ _ __   __| | |")
+print(" | |_) | | | | '_ \ / _ \ |/ _` | '_ \ / _` | |")
+print(" |  _ <| |_| | | | |  __/ | (_| | | | | (_| |_|")
+print(" |_| \_\\__,_|_| |_|\___|_|\__,_|_| |_|\__,_(_)")
+print("                                               ")
+time.sleep(1)
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+                        
+
 
 print('Welcome to Runeland! What is your name?')
-name = input()
+HERONAME = input()
+time.sleep(.5)#Change sleep time
+print(HERONAME +", hmm, interesting. Not what I would have chosen, but I don't suppose you chose it either.")
+time.sleep(.3) #Change sleep time
+print('Right then.. so, "' + HERONAME + '", what kind of an adventurer are you?')
 
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def ClassSelect():
+        
+        print('      Rogue')
+        print('      Warrior')
+        print('      Knight')
+        CLASS = input()
+        
+        
+        if CLASS in ('Rogue', 'rogue', 'r'):
+                print('Rogues wear leather and use small weapons as well as bows. They deal high dammage, but have low health.')
+                time.sleep(.1)#Change sleep time
+                CLASSconfirmrogue = 'x'
+                while CLASSconfirmrogue != ('y', 'n',):
+                        print('Is this the class you want to be? (y/n)')
+                        CLASSconfirmrogue = input()
+                        if CLASSconfirmrogue == 'y':
+                                GameStart()
+                        elif CLASSconfirmrogue == 'n':
+                                print("Let's have another look")
+                                time.sleep(1)
+                                ClassSelect()
+                        else:
+                                print("Let's try that again...")
+                                time.sleep(.5)
+                                
+                        
+        elif CLASS in ('Warrior', 'warrior', 'w'):
+                print('Warriors wear medium armour and use medium weapons and shields. The deal less dammage than the rogue, but have more health.')
+                time.sleep(.1)#Change sleep time
+                CLASSconfirmwarrior = 'x'
+                while CLASSconfirmwarrior != ('y', 'n',):
+                        print('Is this the class you want to be? (y/n)')
+                        CLASSconfirmwarrior = input()
+                        if CLASSconfirmwarrior == 'y':
+                                GameStart()
+                        elif CLASSconfirmwarrior == 'n':
+                                print("Let's have another look")
+                                time.sleep(1)
+                                ClassSelect()
+                        else:
+                                print("Let's try that again...")
+                                time.sleep(.5)
+        elif CLASS in ('Knight', 'knight', 'k'):
+                print('Knights wear heavy armour and use large weapons. They deal the lowest dammage but have a lot of health.')
+                time.sleep(.1)#Change sleep time
+                CLASSconfirmknight = 'x'
+                while CLASSconfirmknight != ('y', 'n',):
+                        print('Is this the class you want to be? (y/n)')
+                        CLASSconfirmknight = input()
+                        if CLASSconfirmknight == 'y':
+                                GameStart()
+                        elif CLASSconfirmknight == 'n':
+                                print("Let's have another look")
+                                time.sleep(1)
+                                ClassSelect()
+                        else:
+                                print("Let's try that again...")
+                                time.sleep(.5)
+      
+
+        else:
+                  print('That was not a valid class.')
+                  time.sleep(3)
+                  print('')
+                  print('What kind of adventurer are you, ' + HERONAME + '?')
+                  ClassSelect()
+
+
+
+
+
+
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+
+
+
+
+
+
+    
 def GameStart():
      print('--------------------------------------------------------------------------')
      print('You stare ahead out in the distance and decide what you will do next')
-     print('--------------------------------------------------------------------------')     
+     print('--------------------------------------------------------------------------')    
+     time.sleep(.2)#Change sleep time
 
-     print('Greetings, Adventurer ' + name + ', what would you like to do?')
+ 
+     print('Greetings, ' +HERONAME + ', what would you like to do?')
      print('')
-     print('a. Go adventuring of course!')
-     print('b. I want to go to the general store')
-     print('c. I want to go home.. I am too scared')
-     print('d. Commit suicide. Living in this world is too stressful')
+     print('a. --Go adventuring of course!')
+     print('b. --I want to go to the general store')
+     print('c. --Check your inventory')
+     print('d. --Check your character armour')
+     print('e. --Check your character stats')
+     print('f. --Check your gold pouch')
+     print('y. --I want to go home.. I am too scared')
+     print('z. --Commit suicide. Living in this world is too stressful')
      answer1 = input()
-
-     if answer1 == 'a':
+ 
+     if answer1 in ("A", "a"):
         Adventure1()
-     elif answer1 == 'b':
-          GeneralStore1()
-     elif answer1 == 'c':
-          GoHome()
-     elif answer1 == 'd':
-          Die()
-
+     elif answer1 in ("B", "b"):
+        GeneralStore1()
+     elif answer1 in ("C", "c"):
+        Inventory()
+     elif answer1 in ("D", "d"):
+        Amour()
+     elif answer1 in ("E", "e"):
+        Stats()
+     elif answer1 in ("F", "f"):
+        Gold()
+     elif answer1 in ("Y", "y"):
+        GoHome()
+     elif answer1 in ("Z", "z"):
+         Die()
+ 
 #############################################################################################################################################################
 #############################################################################################################################################################
 #############################################################################################################################################################
-def Adventure1():   
+def Adventure1():  
      print('-------------------------------------------------------------------------------------------')
      print('You obviously want to go on an adventure')
      print('There are many places around Runeland to adventure. Where would you like to go?')
      print('')
      print('F. The Deep Dark Forest. This is very dark and hard to see in at times... Which could make seeing enemies hard')
      print('C. The Cave of Him. You do not want to meet Him. Could the legends be true? Is He even real?')
-     print('M. The Mountain of cold winters. Unfortunately for you, it is winter and the Sascatoon comes out in the winter from his summer slumber.')
+     print('W. The Mountain of cold winters. It is winter and the Sascarn comes out in the winter from his summer slumber.')
+     print('A. Abandoned Mine')
+     print('M. Murky Mire')
+     print('U. Underwater Cave')
+     print('V. Castle Vlad')
+     print('B. The Barrens')
+     print('X. Never mind. I do not want to adventure')
      answer2a = input()
 
-
-
+     if answer2a in ("F", "f"):
+         DarkForrest()
+     elif answer2a in ("C", "c"):
+         CaveHim()
+     elif answer2a in ("W", "w"):
+         MountainWinter()
+     elif answer2a in ("A", "a"):
+         AbandonedMine()
+     elif answer2a in ("M", "m"):
+         MurkyMire()
+     elif answer2a in ("U", "u"):
+         UnderwaterCave()
+     elif answer2a in ("V", "v"):
+         CastleVlad()
+     elif answer2a in ("B", "b"):
+         Barrens()
+     elif answer2a in ("X", "x"):
+         GameStart()
+     else:
+         print("That is not a proper adventure")
+         time.sleep(1)
+         print("Please choose a different adventure. Please select again.")
+         time.sleep(3)
+         Adventure1()
+ 
+ 
+ 
 #############################################################################################################################################################
 #############################################################################################################################################################
 #############################################################################################################################################################
@@ -51,82 +253,394 @@ def GeneralStore1():
          print('The general store owner looks up and recognizes your face immediately')
          print('-----------------------------------------------------------------------------')
          print('')
-         print('Kazzah:   Greetings, ' + name + '! Long time no see, What can I do for you today?')
-         spacer = input()
+         print('Kazzah:   Greetings, ' + HERONAME + '! Long time no see, What can I do for you today?')
+         time.sleep(.2)
          print('You:   Hows it going Kazzah? I am looking for a few things that you might have.')
-         spacer = input()
+         time.sleep(.2)
          print('Kazzah:   What would you like to look at?')
-         spacer = input()
+         time.sleep(.2)
          print('')
          print('You look around and Kazzah has the following categories')
-         print('a. Health Management   b. Armour   c. Weapons')
+         StoreFront()
+
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def StoreFront():
+         print('a. Health Management   b. Armoury   c. Weapons')
          storeCat = input()
-         
-         if storeCat == 'a':
-              Health()
-         elif storeCat == 'b':
-              Armour()
-         elif storeCat == 'c':
-              Weapons()
+        
+         if storeCat in ('a', 'A'):
+              HealthManagement1()
+         elif storeCat in ('B', 'b'):
+              Armoury1()
+         elif storeCat in ('C', 'c'):
+              Weapons1()
 
 
 
-
-def Health():
+#############################################################################################################################################################
+#############################################################################################################################################################
+############################################################################################################################################################# 
+def HealthManagement1():
+        #goldPouch()
         print('----------------Health Management---------------')
         print('Health Potion - 100g')
         print('Apple - 30g')
         print('Warp Stone - 3000g')
-        HM = input()
+        print('Nothing')
+        healthmgmt = input()
         print('')
-        print('I see you chose ' + HM + '.')
+        print('I see you chose ' + healthmgmt + '.')
 
-        if HM == 'Apple' or 'apple' or 'ap':
-             HM = int(30)
-        elif HM == 'Health Potion' or 'health potion' or 'hp':
-             HM = int(100)
-        elif HM == 'Warp Stone' or 'warp stone' or 'ws':
-             HM = 3000
+        
+        if healthmgmt in ("Apple", "ap", "a"):
+             price = 30
+        elif healthmgmt in ("Health Potion", "hp", "h"):
+             price = 100
+        elif healthmgmt in ("Warp Stone", "ws",):
+             price = 3000
+        elif healthmgmt in ("Nothing", "nt",):
+             print("You: That will be all, Thank you Kazzah.")
+             GameStart()
         else:
              print('That is not a valid choice')
-             spacer = input()
-             GeneralStore1()
+             HealthManagement1()
+
+             
         print('How many do you want?')
         storeMulti = input()
-        total_cost = HM * int(storeMulti)
+        total_cost = price * int(storeMulti)
         print('That will be {} gold pieces.'.format(total_cost))
-#Need to subtract gold from the backpack to not go below 0
+        #hero.gold -= total_cost
+        #if goldPouch >= total_cost:
+        #    goldPouch == goldPouch - total_cost
+        #    print('You have ' + str(goldPouch) + 'g left in your pouch')
+        #else:
+        #    print('You only have ' + str(goldPouch))            
+#Need to subtract gold from the backpack to not go below 0################################
+
 
         print('Can  I get you anything else?')
-        HMyn = input() ####HMyn is Health management Yes or No
-        if HMyn == 'no' or 'No':
-             print('Thanks, ' + name + ', See ya soon.')
+        healthmgmtyn = input()
+        if healthmgmtyn == 'no':
+             print('Thanks, ' + HERONAME + ', See ya soon.')
              GameStart()
-
-def Armour():       
+        else:
+             print('What else can I do for you, ' + HERONAME + '?')
+             StoreFront()
+ #####################################
+def Armoury1():      
         print('----------------------Amour----------------------')
-        print('a. Leather Armour - 200g')
-        print('b. Studded Leather Armour - 400g')
-        print('c. Iron Armor - 600g')
-        print('d. Steel Armour - 999g')
-        AR = input()
+        print('Leather Armour - 200g')
+        print('Studded Leather Armour - 400g')
+        print('Iron Armour - 600g')
+        print('Steel Armour - 999g')
+        armourychoice = input()
+        print('')
+        print('I see you chose ' + armourychoice + '.')
 
-def Weapons():
-        print('----------------------Weapons--------------------')
-        print('a. Dagger - 10g')
-        print('b. Long Sword - 400g')
-        print('c. Bow - 70g')
-        print('d. Arrow - 3g each')
-        WP = input()
 
-   
+        if armourychoice in ("Leather Armour", "la",):
+             price = 200
+        elif armourychoice in ("Studded Leather Armour", "sla",):
+             price = 400
+        elif armourychoice in ("Iron Armour", "ia",):
+             price = 600
+        elif armourychoice in ("Steel Armour", "sa",):
+             price = 999
+        elif armourychoice in ("Nothing", "nt",):
+             print("You: That will be all, Thank you Kazzah.")
+             GameStart()
+        else:
+             print('That is not a valid choice')
+             timer.sleep(2)
+             Armoury1()
+
              
+        print('How many do you want?')
+        storeMulti = input()
+        total_cost = price * int(storeMulti)
+        print('That will be {} gold pieces.'.format(total_cost))  
+        #if goldPouch >= total_cost:
+        #    goldPouch == goldPouch - total_cost
+        #    print('You have ' + str(goldPouch) + 'g left in your pouch')
+        #else:
+        #    print('You only have ' + str(goldPouch))              
+#Need to subtract gold from the backpack to not go below 0################################
+
+
+        print('Can  I get you anything else?')
+        healthmgmtyn = input()
+        if healthmgmtyn == 'no':
+             print('Thanks, ' + HERONAME + ', See ya soon.')
+             GameStart()
+        else:
+             print('What else can I do for you, ' + HERONAME + '?')
+             StoreFront()
+#################################
+def Weapons1():
+        print('----------------------Weapons--------------------')
+        print('Dagger - 10g')
+        print('Long Sword - 400g')
+        print('Bow - 70g')
+        print('Arrow - 3g each')
+        weaponchoice = input()
+        print('')
+        print('I see you chose ' + weaponchoice + '.')
+
+
+        if weaponchoice in ("Dagger", "dg",):
+             price = 10
+        elif weaponchoice in ("Long Sword", "ls",):
+             price = 400
+        elif weaponchoice in ("Bow", "b",):
+             price = 70
+        elif weaponchoice in ("Arrow", "ar",):
+             price = 3
+        elif weaponchoice in ("Nothing", "nt",):
+             print("You: That will be all, Thank you Kazzah.")
+             GameStart()
+        else:
+             print('That is not a valid choice')
+             timer.sleep(2)
+             Weapons1()
+
+             
+        print('How many do you want?')
+        storeMulti = input()
+        total_cost = price * int(storeMulti)
+        print('That will be {} gold pieces.'.format(total_cost))  
+        #if goldPouch >= total_cost:
+        #    goldPouch == goldPouch - total_cost
+        #    print('You have ' + str(goldPouch) + 'g left in your pouch')
+        #else:
+        #    print('You only have ' + str(goldPouch))            
+#Need to subtract gold from the backpack to not go below 0################################
+
+
+        print('Can  I get you anything else?')
+        weaponchoiceyn = input()
+        if weaponchoiceyn == 'no':
+             print('Thanks, ' + HERONAME + ', See ya soon.')
+             GameStart()
+        else:
+             print('What else can I do for you, ' + HERONAME + '?')
+             StoreFront()
+ 
+  
+             
+ 
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def Inventory():
+     print('.')
+     print('Press Enter to leave your inventory')
+     spacer = input()
+     GameStart()
 
 
 
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def Armour():
+     print('.')
+     print('Press Enter to leave your Amour screen')
+     spacer = input()
+     GameStart()
 
 
 
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def Stats():
+     print('.')
+     print('Press Enter to leave your stats')
+     spacer = input()
+     GameStart()
+
+
+     #-------------------------------------------Look to add typical strength, defense, etc.
+     #-------------------------------------------Maybe perception and have it like
+     #-----------------------------------------------------if perception > (random rolled amnt on enemy) can see hit points on enemy.
+
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+def Gold():
+     goldPouch()
+     print('You have a total of ' + goldPouch + ' gold!')
+     print('Press Enter to leave your gold pouch')
+     spacer = input()
+     GameStart()
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#=================================================================Weapons===================================================================================#
+class Item():
+    """The base class for all items"""
+    def __init__(self, name, description, value):
+        self.name = name
+        self.description = description
+        self.value = value
+ 
+    def __str__(self):
+        return "{}\n=====\n{}\nValue: {}\n".format(self.name, self.description, self.value)
+
+class Weapon(Item):
+    def __init__(self, name, description, value, damage):
+        self.damage = damage
+        super().__init__(name, description, value)
+
+class Rock(Weapon):
+    def __init__(self):
+        super().__init__(name="Rock",
+                         description="A rock the size of a pidgeon. Great for bashing skulls.",
+                         value=5,
+                         damage=1)
+
+class Dagger(Weapon):
+    def __init__(self):
+        super().__init__(name="Dagger",
+                         description="A small dagger with some rust. Somewhat more dangerous than a rock.",
+                         value=55,
+                         damage=2)
+
+class LongSword(Weapon):
+    def __init__(self):
+        super().__init__(name="Long Sword",
+                         description="A long sword that does decent damage.",
+                         value=400,
+                         damage=10)
+
+class Bow(Weapon):
+    def __init__(self):
+        super().__init__(name="Bow",
+                         description="A basic bow that is used for ranged attacks.",
+                         value=70,
+                         damage=3)
+
+class Claws(Weapon):
+    def __init__(self):
+        super().__init__(name="Claws",
+                         description="Dual claws used to shred at an enemy.",
+                         value=80,
+                         damage=3)
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#=================================================================Enemies===================================================================================#
+class Enemy:
+    def __init__(self, name, hp, damage):
+        self.name = name
+        self.hp = hp
+        self.damage = damage
+ 
+    def is_alive(self):
+        return self.hp > 0
+
+
+class GiantSpider(Enemy):
+    def __init__(self):
+        super().__init__(name="Giant Spider", hp=7, damage=2)
+
+class Goblin(Enemy):
+    def __init__(self):
+        super().__init__(name="Ogre", hp=15, damage=7) 
+ 
+class Ogre(Enemy):
+    def __init__(self):
+        super().__init__(name="Ogre", hp=30, damage=7)
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#===========================================================================================================================================================#
+#=================================================================Adventures================================================================================#
+#===========================================================================================================================================================#
+################################ The Dark Forrest
+
+def DarkForrest():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Cave of Him
+
+def CaveHim():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Mountain of Fridged Winters
+
+def MountainWinter():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Old Abandoned Mine
+
+def AbandonedMine():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Murky Mire
+
+def MurkyMire():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Underwater Cave
+
+def UnderwaterCave():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ Castle Vlad
+
+def CastleVlad():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+################################ The Barrens
+
+def Barrens():
+    print("You seem frightened and run back")
+    print("This section is coming soon...tm")
+    time.sleep(3)
+    Adventure1()
+
+#===========================================================================================================================================================#
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################        
 #############################################################################################################################################################
 #############################################################################################################################################################
 #############################################################################################################################################################
@@ -136,22 +650,197 @@ def GoHome():
      print('')
      spacer = input()
      GameStart()
-
-
-
+ 
+ 
+ 
 #############################################################################################################################################################
 #############################################################################################################################################################
-#############################################################################################################################################################     
+#############################################################################################################################################################    
 def Die():
-     print('Farewell cruel world! I cannot live on this world any longer!')
-     print('You dead bruh.')
-     print('-----------------------------------------------')
-     print('')
-     spacer = input()
-     GameStart()
+     print('Are you really sure you want to do this? All progress will be lost and you will have to start over.. (yes/no)')
+     death = input()
+
+     if death == 'yes':
+             print('')
+             print('')
+             print('')
+             print('')
+             print('Farewell cruel world! I cannot live on here any longer!')
+             print('')
+             print('')
+             print('')
+             print('')
+             print('xxxx                      xxxx')
+             print('  xxxx                  xxxx')
+             print('    xxxx              xxxx')
+             print('      xxxx          xxxx')
+             print('        xxxx      xxxx')
+             print('          xxxx  xxxx')
+             print(' Game      xxxxxxxx')
+             print('           xxxxxxxx      Over  ')
+             print('          xxxx  xxxx')
+             print('        xxxx      xxxx')
+             print('      xxxx          xxxx')
+             print('    xxxx              xxxx')
+             print('  xxxx                  xxxx')
+             print('xxxx                      xxxx')
+             
+             time.sleep(3)
+             Credits()
+     else:
+             print('Good call, now get back out there and adventure!')
+             time.sleep(1.5)
+             GameStart()
+ 
+
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
+#############################################################################################################################################################
 
 
 
+#Below will run credits for the game in a scrolling manner... Just for funzies.
+def Credits():
+        print('******************************************************************')
+        time.sleep(.3)
+        print('******************************************************************')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('**                  Thanks for playing!                         **')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('**                    Game created by:                          **')
+        time.sleep(.3)
+        print('**                       Kade Barton                            **')
+        time.sleep(.3)
+        print('**                           And                                **')
+        time.sleep(.3)
+        print('**                       Doug Grant                             **')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('**                     Game Directed by:                        **')
+        time.sleep(.3)
+        print('**                       Kade Barton                            **')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('**                                                              **')
+        time.sleep(.3)
+        print('******************************************************************')
+        time.sleep(.3)
+        print('******************************************************************')
+        time.sleep(.3)
+        print('')
+        time.sleep(.275)
+        print('')
+        time.sleep(.25)
+        print('')
+        time.sleep(.225)
+        print('')
+        time.sleep(.2)
+        print('')
+        time.sleep(.175)
+        print('')
+        time.sleep(.15)
+        print('')
+        time.sleep(.125)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+        time.sleep(.1)
+        print('')
+       
+        
+        
+        
+        
 
-
+ 
+ClassSelect()
 GameStart()
+
