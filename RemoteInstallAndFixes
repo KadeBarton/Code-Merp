@@ -2,21 +2,24 @@
 # Code by Kade Barton                   *
 # For GM Financial                      *
 # Inception:        September 2015      *
-# Last Revision:    July 20 2016        *
+# Last Revision:    July 28 2016        *
 #****************************************
 
 #revision 6/14/16: Added a few programs. removed the multi installer since it gets no use with SCCM out there.
 #Revision 6/23/16: removed Quicktime Option and replavced with DXL Update aka the fix for Loading Profile Services taking a long time and boot up time suffering.
+
 #revision 7/20/16: Edited filepaths to go to USAOC from svnas
 #revision 7/20/16: changed the IPC installer to include optional uninstaller
 #revision 7/20/16: Added YELLOW in menu choice to mark what will be taken out soon
+
+#revision 7/28/16: added a script info for users to know what each script does
+#Revision 7/28/16: removed Insight Bridger and IE11 Version Checker
 
 
 
 #--------------------------------------------
 #                  NEED TO DO
 #--------------------------------------------
-#Remove Antiquated code
 #Edit choice list to main installs and temporary fixes
 
 
