@@ -1,0 +1,727 @@
+#****************************************
+# Code by Kade Barton                   *
+# For GM Financial                      *
+# Inception:        September 2015      *
+# Last Revision:    July 20 2016        *
+#****************************************
+
+#revision 6/14/16: Added a few programs. removed the multi installer since it gets no use with SCCM out there.
+#Revision 6/23/16: removed Quicktime Option and replavced with DXL Update aka the fix for Loading Profile Services taking a long time and boot up time suffering.
+#revision 7/20/16: Edited filepaths to go to USAOC from svnas
+#revision 7/20/16: changed the IPC installer to include optional uninstaller
+#revision 7/20/16: Added YELLOW in menu choice to mark what will be taken out soon
+
+
+
+#--------------------------------------------
+#                  NEED TO DO
+#--------------------------------------------
+#Remove Antiquated code
+#Edit choice list to main installs and temporary fixes
+
+
+
+#######################################################################################
+ 
+    do {		
+                write-host "Items in Yellow will be phased out next update" -for Yellow	
+                write-host "`t Single Machine List"
+				Write-Host "`t`t`t1. Snaggit" -for green
+				Write-Host "`t`t`t2. Check For Programs" -for green
+				Write-Host "`t`t`t3. Java" -for green
+				Write-Host "`t`t`t4. Jabber" -for green
+				Write-Host "`t`t`t5. IPC" -for green
+				Write-Host "`t`t`t6. Chatter" -for green
+				Write-Host "`t`t`t7. Single Machine Logoff Fix" -for Green
+                Write-Host "`t`t`t8. Restart McAfee Service" -for green
+                Write-Host "`t`t`t9. MS-Power Query" -for green
+                Write-Host "`t`t`t10. EMPTY" -for Red
+                Write-Host "`t`t`t11. GPS" -for Green
+                Write-Host "`t`t`t12. EMPTY" -for Red
+                Write-Host "`t`t`t13. DXL Update - Profile Services Stuck FIX" -for Green
+                Write-Host "`t`t`t14. COPY Intune" -for Green
+                Write-Host "`t`t`t15. OTWrap fix" -for Green
+                Write-Host "`t`t`t16. K-Lite" -for Green
+                Write-Host "`t`t`t17. Google Chrome" -for Green
+                Write-Host "`t`t`t18. User Profile Load Error" -for Green
+                Write-Host "`t`t`t19. File transfer" -for Green
+				Write-Host "`t`t`tx. Close" 
+                Write-Host "`t`t`ti. Script Info" 
+						
+				$mainMenuChoice = read-host -prompt "`n`n`t`tChoice"
+
+			   switch ($mainMenuChoice)
+			{
+                    #SnagIt
+				"1" { 					
+					 $comp = read-host 'What is the hostname of the computer'																						  
+						If (Test-Connection $comp -count 2 -Quiet) 
+						{
+							Write-host "$comp --- online" -for green
+							write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+							Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\TechSmith\SnagIt\SnagIt-11" -recurse -force -Destination "\\$comp\c$\install"
+							write-host "Application is copied. Please wait for the file to instsall." -for yellow
+							invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\SnagIt-11\snagit-11.4.exe" /S} 
+							write-host "Snagit is installed." -for green
+						}
+						else
+						{
+							$noPing += $comp 
+							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+							
+						}
+                       
+					}
+                    
+					#Check For Programs
+                "2" {
+                        $comp = read-host 'What is your computer name?'
+                        Get-WmiObject  -Class win32_product -Impersonation 3 -computername $comp
+                        gp HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |Select DisplayName, DisplayVersion, Publisher, InstallDate, HelpLink, UninstallString |ogv
+                    }
+                           
+                    #Java           
+                "3" {            
+                        $Comp = Read-Host "What is the computer name?" 
+                        $UserName = Read-Host "Enter User Name" 
+                        $Password = Read-Host -AsSecureString "Enter Your Password:" 
+                        $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $UserName , $Password 
+                        $Service = Get-WmiObject -Class Win32_Service -ComputerName $Comp -Credential $Credential -Filter "Name='$username'" 
+                        $source = "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Java\7u21"
+                        $dest = "\\$comp\C$\install"
+
+
+                        $IPTest = Test-Connection $comp -count 2
+                        $IPAddy = $IPTest.IPV4Address.IPAddressToString
+
+                                function CheckJava()
+                                {
+                                If (test-path "\\$comp\c$\program files (x86)\java\JRE7")
+                                    {
+                                     write-host "JRE7 has been copied correctly" -ForegroundColor Green
+                                    }
+                                else
+                                    {
+                                     write-host "JRE7 is not there, you will need to try again" -ForegroundColor blue
+                                    }
+                                }
+
+                                function CheckCopy()
+                                {
+                                If (test-path "$dest\Java-1.7.21.exe")
+                                    {
+                                     write-host "Java has been copied to c\install" -ForegroundColor Green
+                                    }
+                                else
+                                    {
+                                     write-host "Java is not there, you will need to try again" -ForegroundColor blue
+                                    }
+                        }
+
+                        If ($IPTest) 
+                                        {
+                                $ipaddy[1]
+                                write-host "Begining to copy the file."
+                                Copy-Item -Path $source -recurse -force -Destination $dest
+                                    CheckCopy
+                                write-host "Copied. starting install"
+                                invoke-command -ComputerName $comp -scriptblock{ & cmd /c "c:\windows\support\psexec /accepteula  C:\install\7u21\Java-1.7.21.exe" }
+                                    CheckJava
+                                write-host "Complete" 
+                                write-host "Will show the JRE version on the machine"
+                                get-childitem "\\$comp\c$\program files (x86)\java\"
+
+                                        }                       
+                                        else
+                                        {
+                                            $noPing += $comp 
+                                            write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+                                        }
+
+                    }
+                    
+                    #Jabber
+				"4" {				
+                    $comp = read-host 'What is the Hostname of the computer'
+						If (Test-Connection $comp -count 2 -Quiet) 
+						{
+                          Write "$comp --- Online" -for Green
+                                If (test-path "\\$comp\c$\install\Cisco-Jabber\Cisco-Jabber-11.5.1.exe")
+                                {
+                                
+							        invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-Jabber\Cisco-Jabber-11.5.1.exe" /S} 
+							        write-host "Jabber is installed. Please close the application." -for green
+                                }
+                                else
+                                {
+                                    write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+							        Copy-Item -Path "\\svnastx1001\gmfde_packages\packages\Cisco-Jabber" -recurse -force -Destination "\\$comp\c$\install"
+							        write-host "Application is copied. Please wait for the file to instsall." -for yellow
+                                    invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-Jabber\Cisco-Jabber-11.5.1.exe" /S} 
+							        write-host "Jabber is installed. Please close the application." -for green
+                                }
+                         }
+						 else
+						 {
+							$noPing += $comp 
+							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+						 }
+                    }
+
+                    #IPC
+				"5" {				
+                    function IPCuninstall
+                        {
+                        $app = Get-WmiObject Win32_Product -ComputerName "$comp" | where { $_.name -eq "Cisco IP Communicator" }
+                        write-host "$app"
+                        $app.Uninstall()
+                        }
+                                               
+					$comp = read-host 'What is the hostname of the computer'
+                    $Answer = read-host "Would you like to uninstall IPC first? (y/n)"
+                    If ('y')
+                        {
+                            If (Test-Connection $comp -count 2 -Quiet) 
+						    {
+                                Write-host "$comp --- online" -for Green
+                                write-host "Uninstalling IPC... Please wait."
+                                IPCuninstall
+                                write-host "Uninstalled. Testing path for c\install"
+                                if (test-path "\\$comp\c$\Install\Cisco-Softphone")
+                                {
+                                    write-host "Installing IPC... Please wait"
+                                    invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-SoftPhone\CiscoIPCommunicatorSetup_8.6.2.0" /S} 
+                                }
+                                else
+                                {
+                                    write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+                                    copy-item -path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Cisco\SoftPhone" -recurse -force -Destination "\\$comp\c$\install"
+							        write-host "Application is copied. Please wait for the file to install." -for yellow
+							        invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\SoftPhone\CiscoIPCommunicatorSetup_8.6.2.0" /S} 
+							        write-host "Program is installed." -for green
+                                }
+                               }
+                            else
+						    {
+							    $noPing += $comp 
+							    write $comp 'is not online. Please check to make sure the machine is online, and then try again...'		
+						    }
+                        } 
+                     else{		  
+						    If (Test-Connection $comp -count 2 -Quiet) 
+						    {
+                                 Write-host "$comp --- online" -for Green
+                                    if (test-path "\\$comp\c$\Install\Cisco-Softphone")
+                                    {
+                                        write-host "Installing IPC... Please wait"
+                                        invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\Cisco-SoftPhone\CiscoIPCommunicatorSetup_8.6.2.0" /S} 
+                                    }
+                                    else
+                                    {
+                                        write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+                                        copy-item -path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Cisco\SoftPhone" -recurse -force -Destination "\\$comp\c$\install"
+							            write-host "Application is copied. Please wait for the file to install." -for yellow
+							            invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\SoftPhone\CiscoIPCommunicatorSetup_8.6.2.0" /S} 
+							            write-host "Program is installed." -for green
+                                    }
+                             }
+                            else
+						    {
+							    $noPing += $comp 
+							    write $comp 'is not online. Please check to make sure the machine is online, and then try again...'		
+						    }
+                            }	
+						}                    
+
+                    #Chatter
+				"6" {				
+					$comp = read-host 'What is the hostname of the computer'
+						If (Test-Connection $comp -count 2 -Quiet) 
+						{
+							Write-host "$comp --- online" -for Green
+							write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+							write-host "Application is copied. Please wait for the file to install." -for yellow
+							invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\ChatterDesktop\3.2.1\Salesforce-ChatterDesktop-3.2.1-MSI" /S} 
+							write-host "Program is installed. This application will close in 10 seconds" -for green
+						}  
+						else
+						{
+							$noPing += $comp 
+							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+							
+						}
+                       
+					}
+
+                    #MfeFfCoreServices Log off Fix - McAfee
+				"7"	{
+						$computername = read-host "what is the hostname?"
+						get-process -ComputerName $Computername | Select Name, ID | Sort Name | FT -AutoSize
+						$choice = read-host "is mfeffcoreservice running?"
+
+						if($choice -match "yes")
+						{
+
+							$process = "MfeFfCoreService"
+							(Get-WmiObject Win32_Process -ComputerName $computername | ?{ $_.ProcessName -match "$process" }).Terminate()
+							Write-host "$process has been terminated on $computername" -ForegroundColor green
+							get-process -ComputerName $Computername | Select Name, ID | Sort Name | FT -AutoSize
+						}
+						else
+						{
+						   write-host "process is not currently running" -ForegroundColor red
+						}
+                      
+
+					}
+	
+                    #Restart McAfee Service				
+				"8"	{   
+                    $comp = read-host 'What is the hostname of the computer'
+						If (Test-Connection $comp -count 2 -Quiet) 
+						{  
+                     	    Write-Host "Attempting to restart McAfee Service" -For Red 
+                     	    Invoke-Command -ComputerName $comp {Stop-Service "McAfee Agent Service"}                            
+                     	    Get-Service -ComputerName $comp  -Name "McAfee Agent Service"                                        
+                     	    Write-Host "Please wait while attempting to restart service..." -For Green                      
+                     	    Start-Sleep 10                                                                                 
+                     	    Invoke-Command -ComputerName $comp  {Start-Service "McAfee Agent Service"}                         
+                            Write-Host "Program stop/start completed." -For Green                                          	 
+                     	    Start-Sleep -s 10                                                                                
+                     	    Get-Service -ComputerName $comp  -Name "McAfee Agent Service"                                     
+                     } 
+                     else
+						{
+							$noPing += $comp 
+							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+							
+						}
+                    }
+
+                    #MS-Power Query
+                "9" {				
+					$comp = read-host 'What is the Hostname of the computer'
+					
+						If (Test-Connection $comp -count 2 -Quiet) 
+						{
+							Write "$comp --- Online"
+							write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+							Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Microsoft\Power-Query-for-Excel" -recurse -force -Destination "\\$comp\c$\install"
+							write-host "Application is copied. Please wait for the file to install." -for yellow
+							invoke-command -computername $comp -scriptblock { & cmd /c "msiexec.exe /i C:\Install\Power-Query-for-Excel\PowerQuery32bit.msi" /q ACCEPT_EULA=1 }
+							write-host "MS-Power Query is installed." -for green
+						}
+						else
+						{
+							$noPing += $comp 
+							write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+						}
+                       
+					}
+
+                    #Empty
+                "10" {
+                        write-host "Nothing here. Move along." -for Red
+                        start-sleep 1 
+                        }
+
+                    #GPS Install
+                "11" {     
+                        $comp = read-host 'What is the Hostname of the computer'
+  
+                          If (Test-Connection $comp -count 2 -Quiet) 
+                          {
+                            Write-host "$comp --- online"
+                            Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Panviva-SupportPoint-GPS"  -recurse -force -Destination "\\$comp\c$\install"
+                            write-host "copied"
+                            invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula C:\install\Panviva-SupportPoint-GPS\Panviva-SupportPoint-GPS.exe" /q} 
+                            write-host "Panviva SupportPoint GPS Installed"
+                          }
+  
+   
+                          else
+                          {
+                            $noPing += $comp 
+                            write $comp 'Not pinging'
+                          }
+      
+
+                     }
+
+                    #Empty
+                "12" {
+                        write-host "Nothing here. Move along." -for Red
+                        start-sleep 1 
+                    }
+
+                    #DXL Update
+                "13" { 
+                        $comp = read-host 'What is the hostname of the computer'																							  
+                        If (Test-Connection $comp -count 2 -Quiet) 
+                        {
+	                        Write-host "$comp --- online" -for green
+	                        write-host "Please wait for the copy to complete. This may take a little bit - This is a large file. Do not end the program." -for yellow
+	                        Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\McAfee\DXL\DXL_2.2.0.232" -recurse -force -Destination "\\$comp\c$\install"
+                                if (test-path "\\$comp\c$\install\DXL_2.2.0.232\dx_setup.exe")
+                                {
+                                    write-host "Application is copied. Please wait for the file to instsall." -for yellow
+			                        invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\DXL_2.2.0.232\dx_setup.exe" /q ACCEPT_EULA=1} 
+			                        write-host "DXL 2.2.0.232 is installed. Please close the application." -for green
+                                }
+                                else
+                                {
+                                    write-host "File did not copy to machine. Please try again..."
+                                }	
+                        }
+                        else
+                        {
+	                        $noPing += $comp 
+	                        write $comp 'is not online. Please check to make sure the machine is online, and then try again...'	
+                        }
+                }
+
+                    #Intune Copy
+                "14" {
+                         $comp = read-host 'What is the hostname of the computer'															
+
+		 		  
+	                        If (Test-Connection $comp -count 2) 
+	                        {
+		                        Write-host "$comp --- online" -for green
+		                        write-host "Copying files -- Please Wait" -for yellow
+		                        Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\Microsoft\Intune" -recurse -force -Destination "\\$comp\c$\install"
+                                write-host "Files copied. Checking status..." -for Yellow           
+                                if (test-path "\\$comp\c$\install\Intune\Windows_Intune_Setup.exe")
+                                    {
+                                        write-host "Intune Copied" -for green
+                                    }
+                                else
+                                    {
+                                        write-host "There seems to have been a problem. Intune was not copied correctly to $comp" -for Red
+                                    }
+                            }
+                            else
+                            {
+                                $noPing += $comp 
+		                        write $comp 'is not online. Please check to make sure the machine is online, and then try again...' -for Red
+                        }
+
+                }
+
+                    #OTWrap
+                "15" {                     
+                                
+                        $comp = read-host "What is the computer name?"
+                        $bad1 = get-item "\\$comp\c$\Program Files (x86)\Microsoft Office\Office14\STARTUP"
+                        $bad2 = get-item "\\$comp\c$\Program Files (x86)\Microsoft Office\Office14\XLSTART"
+
+                        $bad1 | Remove-Item -force
+                        $bad2 | Remove-Item -force
+
+                        if (get-item "\\$comp\c$\Program Files (x86)\Microsoft Office\Office14\XLSTART")
+                        {
+                            write-host "XLSTART folder is still there... please do this manually"
+                        }
+                        else
+                        {
+                            write-host "XLSTART removal complete"
+                        }
+
+                        if (get-item "\\$comp\c$\Program Files (x86)\Microsoft Office\Office14\STARTUP")
+                        {
+                            write-host "STARTUP folder is still there... please do this manually"
+                        }
+                        else
+                        {
+                            write-host "STARTUP removal complete"
+                        }
+
+                }
+
+                    #K-Lite
+                "16" {         
+                        function qtui
+                        {
+                            $qtVer = Get-ChildItem -Path \\$comp\HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall, \\$comp\HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall  |
+                            Get-ItemProperty |
+                            Where-Object {$_.DisplayName -match "quicktime" } |
+                                Select-Object -Property DisplayName, UninstallString
+
+                            ForEach ($ver in $qtVer) 
+                            {
+                            If ($ver.UninstallString) 
+                                {
+                            $uninst = $ver.UninstallString
+                            $uninst = $uninst -replace "/I", "/x "
+                            Start-Process cmd -ArgumentList "/c $uninst /quiet /norestart" -NoNewWindow
+                                }
+                            }
+                        }
+                    ###
+                    $comp = read-host 'What is the hostname of the computer'
+                    If (Test-Connection $comp -count 2 -Quiet)
+                    {
+                        Write-host "$comp --- online" -for green 
+                        write-host "attempting to find any quicktime remnants..."                                 
+                        qtui
+		                write-host "Starting K-Lite deployment. Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+		                Copy-Item -Path "\\usaocprinasmb.acf.americredit.com\gmfde_packages\Packages\K-Lite" -recurse -force -Destination "\\$comp\c$\install"
+                            if (test-path "\\$comp\c$\install\K-Lite")
+                            {
+                                write-host "Application is copied. Please wait for the file to instsall." -for yellow
+				                invoke-command -computername $comp -scriptblock { & cmd /c "c:\windows\support\psexec /accepteula c:\install\K-Lite\K-Lite_install.exe" /S} 
+				                write-host "KLite is installed. Please close the application." -for green
+                            }
+                            else
+                            {
+                                write-host "File did not copy to machine. Please try again..."
+                            }				
+	                        
+                        }                      
+	                else
+	                {
+		                $noPing += $comp 
+		                write $comp 'is not online. Please check to make sure the machine is online, and then try again...'	
+	                 }  
+                 }    
+                   
+                    #Chrome
+                "17" {       
+                     $comp = read-host 'What is the hostname of the computer'																							  
+	                If (Test-Connection $comp -count 2 -Quiet) 
+	                {
+		                Write-host "$comp --- online" -for green
+		                write-host "Please wait for the copy to complete. This may take a little bit - This is a large file. Do not end the program." -for yellow
+		                Copy-Item -Path "\\svnastx1001\gmfde_packages\packages\Google-Chrome-Enterprise" -recurse -force -Destination "\\$comp\c$\install"
+                            if (test-path "\\$comp\c$\install\Google-Chrome-Enterprise")
+                            {
+                                write-host "Application is copied. Please wait for the file to instsall." -for yellow
+				                invoke-command -computername $comp -scriptblock { & cmd /c "msiexec.exe /i c:\install\Google-Chrome-Enterprise\GoogleChromeStandaloneEnterprise.msi" /q ACCEPT_EULA=1} 
+				                write-host "Chrome is installed. Please close the application." -for green
+                            }
+                            else
+                            {
+                                write-host "File did not copy to machine. Please try again..."
+                            }
+							
+	                }
+	                else
+	                {
+		                $noPing += $comp 
+		                write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+							
+	                }
+                  }
+              
+                    #User Profile Error
+                "18" { 
+                    $Hostname =  read-host "what is the hostname"
+                    $pingcheck = Test-Connection $Hostname -Count 1 -quiet
+                    $SQM = Test-Path "\\$HostName\c$\Users\Default\AppData\Local\Microsoft\Windows\Temporary Internet Files\SQM"
+
+                    if ($Pingcheck -match "True")
+                    {
+                        if($SQM -match "False")
+                        {
+                        write-host("$Hostname --- File does not exist")
+                        }
+                        else
+                        {
+                        remove-item "\\$HostName\c$\Users\Default\AppData\Local\Microsoft\Windows\Temporary Internet Files\SQM" -force -recurse
+                        write-host("$HostName --- File Deleted")
+                        $Counter = ($Counter + 1)
+                        }
+                        }
+
+                    else
+                    {
+                    write-host("$Hostname --- host is offline")
+                    }
+
+
+
+                    write-host "===================================="
+                    write-host "     $Hostname completed "
+                    write-host "====================================" 
+                    }   
+                    
+                    #File Xfer
+                "19" {   
+                    function CheckDir()
+                        {
+                            get-childitem "\\$compNew\c$\users\$username\" -force
+                
+                        }
+                        $compOld = read-host 'What is the hostname of the old computer'
+                        $compNew = read-host 'What is the hostname of the New computer'	
+                        $username = read-host 'What is the users username'
+			 		  
+	                If (Test-Connection $compOld -count 2 -Quiet) 
+	                {
+		                Write-host "$compOld --- online" -for green
+		                write-host "Please wait for the copy to complete. This may take several minutes. Do not end the program." -for yellow
+                       # write-host "Starting Desktop" -for yellow
+		               # Copy-Item -Path "\\$compOld\c$\users\$username\Desktop" -recurse -force -Destination "\\$compNew\c$\users\$username\"
+                        write-host "Desktop Completed - Starting Favorites" -for yellow
+                        Copy-Item -Path "\\$compOld\c$\users\$username\Favorites" -recurse -force -Destination "\\$compNew\c$\users\$username\"
+                        write-host "Favorites Completed - Starting My Docs" -for yellow
+                        Copy-Item -Path "\\$compOld\c$\users\$username\My Documents" -recurse -force -Destination "\\$compNew\c$\users\$username\"
+
+		                write-host "Desktop, Favorites, and My Docs are copied." -for yellow
+                        CheckDir
+	                }
+	                else
+	                {
+		                $noPing += $comp 
+		                write $comp 'is not online. Please check to make sure the machine is online, and then try again...'
+							
+	                }       #>     
+                }     
+                    
+                    #Info Section       
+                "i"
+                {
+                write-host "`t What program do you want to know about?"
+                write-host ""
+				Write-Host "`t`t`t1. Snaggit" -for green
+				Write-Host "`t`t`t2. Check For Programs" -for green
+				Write-Host "`t`t`t3. Java" -for green
+				Write-Host "`t`t`t4. Jabber" -for green
+				Write-Host "`t`t`t5. IPC" -for green
+				Write-Host "`t`t`t6. Chatter" -for green
+				Write-Host "`t`t`t7. Single Machine Logoff Fix" -for Green
+                Write-Host "`t`t`t8. Restart McAfee Service" -for green
+                Write-Host "`t`t`t9. MS-Power Query" -for green
+                Write-Host "`t`t`t10. Empty" -for Red
+                Write-Host "`t`t`t11. GPS" -for Green
+                Write-Host "`t`t`t12. Bridger-Insight" -for Red
+                Write-Host "`t`t`t13. DXL Update - Profile Services Stuck FIX" -for Green
+                Write-Host "`t`t`t14. COPY Intune" -for Green
+                Write-Host "`t`t`t15. OTWrap fix" -for Green
+                Write-Host "`t`t`t16. K-Lite" -for Green
+                Write-Host "`t`t`t17. Google Chrome" -for Green
+                Write-Host "`t`t`t18. User Profile Load Error" -for Green
+                Write-Host "`t`t`t19. File transfer" -for Green
+                
+                $infoChoice = read-host -prompt "`n`n`t`tChoice"
+
+			   switch ($infoChoice)
+			{
+                #SnagIt
+				"1" { 					
+							Write-host "This will install SnagIt on the user's machine" -for green  
+                            start-sleep 5                     
+					}
+
+                #Check For Programs
+				"2" { 					
+							Write-host "Runs a query for what programs have been installed on the computer" -for green 
+                            start-sleep 5                      
+					}
+
+                #Java
+				"3" { 					
+							Write-host "This will install Java on the user's machine" -for green
+                            start-sleep 5                       
+					}
+
+                #Jabber
+				"4" { 					
+							Write-host "This will install Jabber on the user's machine" -for green
+                            start-sleep 5                       
+					}
+
+                #IPC
+				"5" { 					
+							Write-host "This will install IPC on the user's machine. This DOES NOT configure IPC" -for green  
+                            start-sleep 5                     
+					}
+
+                #Chatter
+				"6" { 					
+							Write-host "This will install Chatter on the user's machine" -for green  
+                            start-sleep 5                            
+					}
+
+                #Single Machine Logoff Fix
+				"7" { 					
+							Write-host "This fixes an issue in McAFee that doens't let the user log off due to MfEFfCoreService" -for green  
+                            start-sleep 5                            
+					}
+
+                #Restart McAfee Service
+				"8" { 					
+							Write-host "This restarts the McAfee service on the user's computer" -for green  
+                            start-sleep 5                            
+					}
+
+                #MS-Power Query
+				"9" { 					
+							Write-host "Install Power Query on the user's machine. Used for sales users" -for green 
+                            start-sleep 5                             
+					}
+
+                #Check IE11 Version
+				"10" { 					
+							Write-host "Empty" -for -for Red
+                            start-sleep 1                        
+					}
+
+                #GPS
+				"11" { 					
+							Write-host "This will install GPS on the user's computer" -for green  
+                            start-sleep 5                            
+					}
+
+                #Empty
+				"12" { 					
+							Write-host "Empty" -for -for Red
+                            start-sleep 1                        
+					}
+
+                #DXL Update - Profile Services Stuck FIX
+				"13" { 					
+							Write-host "This updates the DXL to 2.2.0.232. This has fixed many  issues with slow boot up time due to comptuers sticking on Loading Profile Servies" -for green 
+                            start-sleep 5                             
+					}
+
+                #COPY Intune
+				"14" { 					
+							Write-host "This will COPY Intune to the user's machine" -for green  
+                            start-sleep 5                            
+					}
+
+                #OTWrap fix
+				"15" { 					
+							Write-host "This resolves an error where Salesforce for Office wasn't completely uninstalled and MSPQ wasn't working correctly" -for green 
+                            start-sleep 5                             
+					}
+
+                #K-Lite
+				"16" { 					
+							Write-host "This will install K-Lite on the user's machine" -for green  
+                            start-sleep 5                            
+					}
+
+                #Google Chrome
+				"17" { 					
+							Write-host "This will install Google Chrome on the user's machine. This is used mostly for Admins" -for green        
+                            start-sleep 5                      
+					}
+
+                #User Profile Load Error
+				"18" { 					
+							Write-host "This resolves the issue of not being able to log in to a user's computer. says Unable to load User's Profile" -for green 
+                            start-sleep 5                             
+					}
+
+                #File Transfer
+				"19" { 					
+							Write-host "Transfers users Desktop, Favorites, and Documents automatically. Requires old and new CI names and users username" -for green  
+                            start-sleep 5                            
+					}
+            }             
+          }                                   
+		}				  
+	}
+    while($mainMenuChoice -ne "x")   
